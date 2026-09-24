@@ -6,6 +6,7 @@ from typing import List, Optional
 import torch
 from sentence_transformers import CrossEncoder
 
+from app.config.tracing import traceable
 from app.schemas.query import RetrievedChunk
 
 logger = logging.getLogger("novacore.retrieval.reranker")
@@ -38,6 +39,7 @@ class CrossEncoderReranker:
             self._model = CrossEncoder(self.model_name, device=self.device)
         return self._model
 
+    @traceable(name="cross_encoder_rerank", run_type="chain")
     def rerank(
         self,
         query: str,

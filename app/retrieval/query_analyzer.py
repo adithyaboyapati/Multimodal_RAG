@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 from app.config.constants import ModalityType
+from app.config.tracing import traceable
 from app.schemas.query import FilterCriteria, ModalityIntent
 
 
@@ -26,6 +27,7 @@ class QueryAnalyzer:
     TABULAR_KEYWORDS = re.compile(r"\b(table|breakdown|rows|columns|financials|metrics|comparison|yoy|quarterly)\b", re.IGNORECASE)
     PAGE_FILTER_PATTERN = re.compile(r"\bpages?\s*(\d+)(?:\s*(?:and|to|-)\s*(\d+))?\b", re.IGNORECASE)
 
+    @traceable(name="query_analysis", run_type="parser")
     def analyze_query(self, query: str) -> QueryAnalysisResult:
         """Analyze query string and return classification and decomposed queries."""
         clean_query = query.strip()

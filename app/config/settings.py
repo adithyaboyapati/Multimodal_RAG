@@ -38,6 +38,24 @@ class Settings(BaseSettings):
         description="NVIDIA API Key for NeMo Retriever NIM reranking.",
     )
 
+    # LangSmith Observability & Tracing Configuration
+    langchain_tracing_v2: bool = Field(
+        default=True,
+        description="Enable LangSmith distributed tracing.",
+    )
+    langchain_api_key: str = Field(
+        default="",
+        description="LangSmith API Key for tracing prompts, latencies, and evaluations.",
+    )
+    langchain_project: str = Field(
+        default="novacore-multimodal-rag",
+        description="LangSmith project name.",
+    )
+    langchain_endpoint: str = Field(
+        default="https://api.smith.langchain.com",
+        description="LangSmith API endpoint URL.",
+    )
+
     # Pinecone Vector Database Configuration
     pinecone_index_name: str = Field(
         default="novacore-multimodal-rag",
@@ -146,7 +164,19 @@ class Settings(BaseSettings):
         return path
 
 
+    def configure_tracing(self) -> None:
+        """Export LangSmith environment variables into os.environ for automated tracing hooks."""
+        import os
+        if self.langchain_api_key and not self.langchain_api_key.startswith("your_"):
+            os.environ["LANGCHAIN_TRACING_V2"] = "true" if self.langchain_tracing_v2 else "false"
+            os.environ["LANGCHAIN_API_KEY"] = self.langchain_api_key
+            os.environ["LANGCHAIN_PROJECT"] = self.langchain_project
+            os.environ["LANGCHAIN_ENDPOINT"] = self.langchain_endpoint
+
+
 @lru_cache()
 def get_settings() -> Settings:
     """Singleton getter for application settings."""
-    return Settings()
+    settings = Settings()
+    settings.configure_tracing()
+    return settings

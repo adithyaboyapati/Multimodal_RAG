@@ -12,6 +12,7 @@ logger = logging.getLogger("novacore.generation.multimodal")
 
 from app.config.constants import PromptTemplates
 from app.config.settings import Settings, get_settings
+from app.config.tracing import traceable
 from app.generation.context_builder import ContextBuilder
 from app.schemas.query import ModalityIntent, RetrievedChunk
 from app.schemas.response import Citation, LatencyBreakdown, RAGResponse, VisualArtifact
@@ -36,6 +37,7 @@ class MultimodalGenerator:
         self.context_builder = context_builder or ContextBuilder()
         self.client = client or Groq(api_key=self.settings.groq_api_key)
 
+    @traceable(name="multimodal_generator", run_type="llm")
     def generate(
         self,
         question: str,

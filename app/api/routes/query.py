@@ -5,6 +5,7 @@ import time
 from fastapi import APIRouter, Depends, status
 
 from app.api.dependencies import get_hybrid_retriever, get_multimodal_generator
+from app.config.tracing import traceable
 from app.generation.multimodal_generator import MultimodalGenerator
 from app.retrieval.hybrid_retriever import HybridRetriever
 from app.schemas.query import QueryRequest
@@ -19,6 +20,7 @@ router = APIRouter(prefix="/api/v1", tags=["Query"])
     status_code=status.HTTP_200_OK,
     summary="Query the multimodal RAG knowledge base",
 )
+@traceable(name="multimodal_rag_pipeline", run_type="chain")
 async def query_multimodal_rag(
     request: QueryRequest,
     retriever: HybridRetriever = Depends(get_hybrid_retriever),

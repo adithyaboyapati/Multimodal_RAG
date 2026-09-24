@@ -881,7 +881,65 @@ Performance benchmarks measured on Apple Silicon (M-series, local Python runtime
 
 ---
 
-## 20. Testing Strategy
+## 20. Observability & Distributed Tracing with LangSmith
+
+Production enterprise RAG pipelines require granular visibility into latency bottlenecks, token consumption, query routing decisions, and retrieval relevance. NovaCore features first-class distributed telemetry powered by **LangSmith**.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as User / Client
+    participant API as FastAPI (query_multimodal_rag)
+    participant Analyzer as QueryAnalyzer (analyze_query)
+    participant Retriever as HybridRetriever (retrieve)
+    participant Embedder as OpenAIDenseEmbedder (openai_embed_query)
+    participant Reranker as NVIDIAReranker (nvidia_nemotron_rerank)
+    participant Generator as MultimodalGenerator (multimodal_generator)
+    participant LangSmith as LangSmith Telemetry
+
+    User->>API: POST /api/v1/query
+    Note over API,LangSmith: Trace Root Span: query_multimodal_rag
+    API->>Analyzer: Decompose & detect intent
+    Analyzer-->>LangSmith: Log parser span & detected intent
+    API->>Retriever: Dense + BM25 hybrid search
+    Retriever->>Embedder: Compute query vector (MRL 384-dim)
+    Embedder-->>LangSmith: Log embedding span & cache status
+    Retriever-->>LangSmith: Log retriever span & raw candidates
+    API->>Reranker: Cross-attention score reordering
+    Reranker-->>LangSmith: Log reranker span & top-k score deltas
+    API->>Generator: Synthesize response (Text vs Vision VLM)
+    Generator-->>LangSmith: Log LLM span, prompt tokens & completion tokens
+    API-->>User: RAGResponse (Answer + Citations + LatencyBreakdown)
+```
+
+### Key Traced Pipeline Stages
+Every critical stage in the RAG execution path is instrumented using the `@traceable` decorator from `app.config.tracing`:
+
+| Span Name | Run Type | Module | Telemetry Captured |
+| :--- | :--- | :--- | :--- |
+| `query_multimodal_rag` | `chain` | `app/api/routes/query.py` | Total end-to-end request, parameters, and top-level response payload |
+| `analyze_query` | `parser` | `app/retrieval/query_analyzer.py` | Modality intent (`TEXT`, `TABLE`, `VISUAL`, `HYBRID`) and sub-queries |
+| `hybrid_retriever` | `retriever` | `app/retrieval/hybrid_retriever.py` | Candidate documents, convex alpha fusion scores, and Pinecone metrics |
+| `openai_embed_query` | `embedding` | `app/embeddings/openai_embedder.py` | Input text, embedding dimension (384), model, and in-memory cache hits |
+| `rerank` / `nvidia_nemotron_rerank` | `chain` | `app/retrieval/reranker.py` & `nvidia_reranker.py` | Candidate score shifts, cross-encoder attention scores, top-$k$ prune |
+| `multimodal_generator` | `llm` | `app/generation/multimodal_generator.py` | Model name, system prompts, attached Base64 image tokens, generation output |
+
+### Enabling LangSmith Tracing
+
+1. **Obtain an API Key**: Sign up at [smith.langchain.com](https://smith.langchain.com/) and create a personal or organization API key.
+2. **Add to `.env`**:
+   ```bash
+   LANGCHAIN_TRACING_V2=true
+   LANGCHAIN_API_KEY=lsv2_pt_xxxxxxxxxxxxxxxxxxxx
+   LANGCHAIN_PROJECT=novacore-multimodal-rag
+   LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+   ```
+3. **Automatic Zero-Overhead Fallback**:
+   If `LANGCHAIN_API_KEY` is not provided or contains placeholder text, all tracing decorators gracefully degrade to transparent pass-through wrappers (`@functools.wraps`) with **zero network calls** and **zero runtime overhead**. Unit and integration tests run completely offline and hermetically.
+
+---
+
+## 21. Testing Strategy
 
 The repository includes a test suite with **24 passing tests** across unit and integration categories.
 
@@ -902,7 +960,7 @@ pytest
 
 ---
 
-## 21. How to Extend the System
+## 22. How to Extend the System
 
 The architecture is built on abstract base classes, making it straightforward to add new capabilities:
 
@@ -934,7 +992,7 @@ Implement the vector store interface in `app/retrieval/vector_store.py` (e.g. Qd
 
 ---
 
-## 22. Multimodal RAG Learning Map
+## 23. Multimodal RAG Learning Map
 
 This learning map connects conceptual RAG theory directly to the source files implementing each mechanism in this repository:
 

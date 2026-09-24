@@ -5,6 +5,7 @@ Reciprocal Rank Fusion (RRF), and cross-encoder reranking.
 from typing import Dict, List, Optional, Tuple
 
 from app.config.settings import Settings, get_settings
+from app.config.tracing import traceable
 from app.retrieval.query_analyzer import QueryAnalysisResult, QueryAnalyzer
 from app.retrieval.reranker import CrossEncoderReranker
 from app.retrieval.vector_store import PineconeHybridVectorStore
@@ -75,6 +76,7 @@ class HybridRetriever:
 
         return fused_chunks
 
+    @traceable(name="hybrid_retrieval", run_type="retriever")
     def retrieve(
         self,
         request: QueryRequest,

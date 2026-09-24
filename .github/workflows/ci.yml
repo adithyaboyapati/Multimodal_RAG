@@ -33,6 +33,7 @@ jobs:
           PINECONE_API_KEY: mock_pinecone_key
           OPENAI_API_KEY: mock_openai_key
           NVIDIA_API_KEY: mock_nvidia_key
+          LANGCHAIN_TRACING_V2: "false"
 
   frontend-build:
     name: Frontend Lint & Build

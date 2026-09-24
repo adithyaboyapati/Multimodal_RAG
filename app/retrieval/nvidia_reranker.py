@@ -8,6 +8,7 @@ import requests
 from requests.adapters import HTTPAdapter
 
 from app.config.settings import Settings, get_settings
+from app.config.tracing import traceable
 from app.schemas.query import RetrievedChunk
 
 logger = logging.getLogger("novacore.reranker.nvidia")
@@ -45,6 +46,7 @@ class NVIDIAReranker:
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
 
+    @traceable(name="nvidia_nemotron_rerank", run_type="chain")
     def rerank(
         self,
         query: str,

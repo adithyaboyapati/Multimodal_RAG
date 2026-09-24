@@ -6,6 +6,7 @@ from typing import List, Optional
 from openai import OpenAI
 
 from app.config.settings import Settings, get_settings
+from app.config.tracing import traceable
 from app.embeddings.base import BaseDenseEmbedder
 
 
@@ -35,6 +36,7 @@ class OpenAIDenseEmbedder(BaseDenseEmbedder):
         """Configured output dimension for embeddings."""
         return self._dimension
 
+    @traceable(name="openai_embed_query", run_type="embedding")
     def embed_query(self, text: str) -> List[float]:
         """Embed a single query string using text-embedding-3-small with in-memory caching."""
         clean_text = text.replace("\n", " ").strip()
@@ -59,6 +61,7 @@ class OpenAIDenseEmbedder(BaseDenseEmbedder):
 
         return embedding
 
+    @traceable(name="openai_embed_documents", run_type="embedding")
     def embed_documents(self, texts: List[str], batch_size: int = 128) -> List[List[float]]:
         """Batch embed multiple document strings with dimension reduction."""
         if not texts:
