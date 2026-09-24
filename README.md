@@ -30,33 +30,33 @@ Traditional RAG flattens PDFs into plain ASCII, scrambling tables and discarding
 
 ```mermaid
 graph TD
-    subgraph Ingestion_Pipeline [Ingestion Subsystem (Offline / Async)]
-        A[PDF Document] --> B[AssetStore: SHA-256 Checksum]
-        B --> C[PDFParser: PyMuPDF 1.24+]
-        C --> D1[Text Extraction: Spatial Table Masking]
-        C --> D2[TableExtractor: Pandas -> Markdown]
-        C --> D3[VisualExtractor: Raster & Vector Drawing Renderings]
-        D3 --> E[VisualSummarizer: Groq Qwen 27B VLM + Disk Cache]
-        D1 & D2 & E --> F[HierarchicalChunker: Parent-Child Linkage]
-        F --> G1[Dense Embedder: 384-dim Normalized Vectors]
-        F --> G2[BM25 Sparse Embedder: 32-bit CRC32 Lexical Hasher]
-        G1 & G2 --> H[(Pinecone Serverless Hybrid Index)]
+    subgraph Ingestion_Pipeline ["Ingestion Subsystem (Offline / Async)"]
+        A["PDF Document"] --> B["AssetStore: SHA-256 Checksum"]
+        B --> C["PDFParser: PyMuPDF 1.24+"]
+        C --> D1["Text Extraction: Spatial Table Masking"]
+        C --> D2["TableExtractor: Pandas to Markdown"]
+        C --> D3["VisualExtractor: Raster & Vector Drawing Renderings"]
+        D3 --> E["VisualSummarizer: Groq Qwen 27B VLM + Disk Cache"]
+        D1 & D2 & E --> F["HierarchicalChunker: Parent-Child Linkage"]
+        F --> G1["Dense Embedder: 384-dim Normalized Vectors"]
+        F --> G2["BM25 Sparse Embedder: 32-bit CRC32 Lexical Hasher"]
+        G1 & G2 --> H[("Pinecone Serverless Hybrid Index")]
     end
 
-    subgraph Serving_Pipeline [Query Subsystem (Online / Sub-Second)]
-        I[User Query] --> J[QueryAnalyzer: Intent & Sub-Query Decomposition]
-        J --> K[Hybrid Search Engine: Convex Alpha Fusion]
+    subgraph Serving_Pipeline ["Query Subsystem (Online / Sub-Second)"]
+        I["User Query"] --> J["QueryAnalyzer: Intent & Sub-Query Decomposition"]
+        J --> K["Hybrid Search Engine: Convex Alpha Fusion"]
         H -.-> K
-        K --> L[Cross-Encoder / NVIDIA NIM Reranker]
-        L --> M[ContextBuilder: Token Budgeting & Base64 Packing]
-        M --> N{Visual Assets Attached?}
-        N -- Yes --> O1[Multimodal VLM: Groq qwen/qwen3.8-27b]
-        N -- No --> O2[Fast Text LLM: Groq openai/gpt-oss-20b]
-        O1 & O2 --> P[RAGResponse: Grounded Answer + Citations + Latency Telemetry]
+        K --> L["Cross-Encoder / NVIDIA NIM Reranker"]
+        L --> M["ContextBuilder: Token Budgeting & Base64 Packing"]
+        M --> N{"Visual Assets Attached?"}
+        N -->|Yes| O1["Multimodal VLM: Groq qwen/qwen3.8-27b"]
+        N -->|No| O2["Fast Text LLM: Groq openai/gpt-oss-20b"]
+        O1 & O2 --> P["RAGResponse: Grounded Answer + Citations + Latency Telemetry"]
     end
 
-    subgraph Observability [Distributed Tracing]
-        J & K & L & O1 & O2 -.-> Q[LangSmith Platform]
+    subgraph Observability ["Distributed Tracing"]
+        J & K & L & O1 & O2 -.-> Q["LangSmith Platform"]
     end
 ```
 

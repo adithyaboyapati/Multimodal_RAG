@@ -6,32 +6,32 @@ Transforming the NovaCore Multimodal RAG Jupyter notebook (`Build_Multimodal_RAG
 
 ```mermaid
 graph TD
-    subgraph Phase 1 [Phase 1: Deep Audit & Diagnostics]
-        A[Notebook Analysis] --> B[Architecture Reconstruction]
-        B --> C[Failure Mode & Debt Audit]
+    subgraph Phase_1 ["Phase 1: Deep Audit & Diagnostics"]
+        A["Notebook Analysis"] --> B["Architecture Reconstruction"]
+        B --> C["Failure Mode & Debt Audit"]
     end
 
-    subgraph Phase 2 [Phase 2: Target Production Architecture]
-        D[Layered System Design] --> E[Unified Multimodal Schemas]
-        E --> F[Interface Abstractions: Parser, Embedder, Retriever, Generator]
+    subgraph Phase_2 ["Phase 2: Target Production Architecture"]
+        D["Layered System Design"] --> E["Unified Multimodal Schemas"]
+        E --> F["Interface Abstractions: Parser, Embedder, Retriever, Generator"]
     end
 
-    subgraph Phase 3 [Phase 3: Incremental Production Implementation]
-        G[Subsystem 1: Core Schemas & Config] --> H[Subsystem 2: Document Ingestion & Parsing]
-        H --> I[Subsystem 3: Multimodal Chunking & Representation]
-        I --> J[Subsystem 4: Dual Embedding & Hybrid Vector Storage]
-        J --> K[Subsystem 5: Hybrid Retrieval & Cross-Modal Reranking]
-        K --> L[Subsystem 6: Context Assembly & Multimodal Generation]
-        L --> M[Subsystem 7: Production FastAPI Service & Observability]
-        M --> N[Subsystem 8: Evaluation & Test Harness]
+    subgraph Phase_3 ["Phase 3: Incremental Production Implementation"]
+        G["Subsystem 1: Core Schemas & Config"] --> H["Subsystem 2: Document Ingestion & Parsing"]
+        H --> I["Subsystem 3: Multimodal Chunking & Representation"]
+        I --> J["Subsystem 4: Dual Embedding & Hybrid Vector Storage"]
+        J --> K["Subsystem 5: Hybrid Retrieval & Cross-Modal Reranking"]
+        K --> L["Subsystem 6: Context Assembly & Multimodal Generation"]
+        L --> M["Subsystem 7: Production FastAPI Service & Observability"]
+        M --> N["Subsystem 8: Evaluation & Test Harness"]
     end
 
-    subgraph Phase 4 [Phase 4: Mastery Mode & Final Deliverables]
-        O[Rebuild Exercises] --> P[Architecture Interview Q&A]
-        P --> Q[Mastery Map: Beginner to Advanced]
+    subgraph Phase_4 ["Phase 4: Mastery Mode & Final Deliverables"]
+        O["Rebuild Exercises"] --> P["Architecture Interview Q&A"]
+        P --> Q["Mastery Map: Beginner to Advanced"]
     end
 
-    Phase 1 --> Phase 2 --> Phase 3 --> Phase 4
+    Phase_1 --> Phase_2 --> Phase_3 --> Phase_4
 ```
 
 ---
