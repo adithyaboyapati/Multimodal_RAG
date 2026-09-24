@@ -1,0 +1,44 @@
+# Git & IDE
+.git
+.github
+.gitignore
+.vscode
+.idea
+*.sublime-*
+.DS_Store
+
+# Environments & Virtual Envs
+.env
+.env.*
+!.env.example
+.venv
+venv
+ENV
+env
+
+# Byte-compiled / cache / test artifacts
+__pycache__
+*.py[cod]
+*$py.class
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.mypy_cache
+.ruff_cache
+
+# Extracted runtime output & local data
+novacore_extracted_images/
+novacore_extracted_visuals/
+evaluation_results.json
+
+# Frontend build & dependencies (handled separately or served static)
+frontend/node_modules/
+frontend/dist/
+node_modules/
+dist/
+
+# Notebooks & large reference slide PDFs
+Build_Multimodal_RAG_NovaCore.ipynb
+docs/Multimodal_RAG_LangChain_Pinecone_With_Examples.pptx.pdf
+implementation_plan.md

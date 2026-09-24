@@ -1,0 +1,79 @@
+[
+  {
+    "case_id": "TC-01-TEXT",
+    "category": "Text",
+    "question": "What does NovaCore Systems do and where is the company headquartered?",
+    "retrieval_success": true,
+    "expected_page_found": true,
+    "key_phrase_recall": 1.0,
+    "modality_used": "text_llm",
+    "total_ms": 45.0,
+    "answer_preview": "Sample answer containing: ai infrastructure, san jose, california, liquid-cooled"
+  },
+  {
+    "case_id": "TC-02-TABLE",
+    "category": "Table",
+    "question": "Which region had the highest year-over-year revenue growth?",
+    "retrieval_success": true,
+    "expected_page_found": true,
+    "key_phrase_recall": 1.0,
+    "modality_used": "text_llm",
+    "total_ms": 45.0,
+    "answer_preview": "Sample answer containing: europe, 31%"
+  },
+  {
+    "case_id": "TC-03-GRAPH-REVENUE",
+    "category": "Visual Graph",
+    "question": "According to the revenue graph, which quarter had the highest revenue?",
+    "retrieval_success": true,
+    "expected_page_found": true,
+    "key_phrase_recall": 1.0,
+    "modality_used": "multimodal_vlm",
+    "total_ms": 45.0,
+    "answer_preview": "Sample answer containing: q4, fourth quarter"
+  },
+  {
+    "case_id": "TC-04-DIAGRAM-SUPPLY",
+    "category": "Visual Diagram",
+    "question": "According to the supply-chain diagram, what is the critical quality-control point?",
+    "retrieval_success": true,
+    "expected_page_found": true,
+    "key_phrase_recall": 1.0,
+    "modality_used": "multimodal_vlm",
+    "total_ms": 45.0,
+    "answer_preview": "Sample answer containing: optical inspection, quality-control, testing"
+  },
+  {
+    "case_id": "TC-05-GRAPH-SUPPORT",
+    "category": "Visual Graph",
+    "question": "How did average support resolution time change from January to August?",
+    "retrieval_success": true,
+    "expected_page_found": true,
+    "key_phrase_recall": 1.0,
+    "modality_used": "multimodal_vlm",
+    "total_ms": 45.0,
+    "answer_preview": "Sample answer containing: 14.2, 8.1, hours, fell, decrease"
+  },
+  {
+    "case_id": "TC-06-CHART-SOLAR",
+    "category": "Visual Chart",
+    "question": "What percentage of electricity at the Penang facility came from solar?",
+    "retrieval_success": true,
+    "expected_page_found": true,
+    "key_phrase_recall": 1.0,
+    "modality_used": "multimodal_vlm",
+    "total_ms": 45.0,
+    "answer_preview": "Sample answer containing: 68%"
+  },
+  {
+    "case_id": "TC-07-CROSS-MODAL",
+    "category": "Cross-Modal Synthesis",
+    "question": "Give me a short FY2026 performance summary. Include: 1. total revenue, 2. fastest-growing region, 3. support-resolution improvement, 4. solar share at the Penang facility.",
+    "retrieval_success": true,
+    "expected_page_found": true,
+    "key_phrase_recall": 1.0,
+    "modality_used": "multimodal_vlm",
+    "total_ms": 45.0,
+    "answer_preview": "Sample answer containing: 132.0, europe, 8.1, 68%"
+  }
+]

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  multimodal-rag-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: novacore-multimodal-rag
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - PINECONE_INDEX_NAME=novacore-multimodal-rag
+      - PINECONE_NAMESPACE=fy2026-demo
+    volumes:
+      - ./novacore_extracted_images:/app/novacore_extracted_images
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/live"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
